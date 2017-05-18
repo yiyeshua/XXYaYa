@@ -1,4 +1,4 @@
-package com.yiyeshu.xxyaya.module.home;
+package com.yiyeshu.xxyaya.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.weavey.loading.lib.LoadingLayout;
 import com.yiyeshu.xxyaya.R;
 import com.yiyeshu.xxyaya.base.BaseActivity;
+import com.yiyeshu.xxyaya.ui.fragment.MainFragment;
 import com.yiyeshu.xxyaya.utils.ViewUtil;
 
 import butterknife.BindView;
@@ -27,7 +28,7 @@ public class HomeActivity extends BaseActivity {
     private static String TAG = "HomeActivity";
 
     private ActionBarDrawerToggle mDrawerToggle;  //菜单开关
-    private FragmentManager mFragmentManager;
+    private FragmentManager mFragmentManager;    //fragment管理器
     private Fragment mCurrentFragment;
     private MenuItem mPreMenuItem;
 
@@ -52,10 +53,11 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void beforeInit() {
         mFragmentManager = getSupportFragmentManager();
+
     }
 
     @Override
-    protected void initView(Bundle savedInstanceState) {
+    protected void setUpView(Bundle savedInstanceState) {
         mToolbar.setTitle("首页");
 
         //这句一定要在下面几句之前调用，不然就会出现点击无反应
@@ -71,12 +73,24 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public void onReload(View v) {
-
                 Toast.makeText(HomeActivity.this, "重试", Toast.LENGTH_SHORT).show();
             }
         });
         mLoading.setStatus(LoadingLayout.Success);
-        //mLoading.setStatus(LoadingLayout.Loading);
+
+    }
+
+    @Override
+    protected void initData() {
+        initDefaultFragment();
+    }
+
+    //设置默认显示第一个fragment，左侧菜单栏默认选中第一个
+    private void initDefaultFragment() {
+        mCurrentFragment=ViewUtil.createFragment(MainFragment.class);
+        mFragmentManager.beginTransaction().add(R.id.frame_content,mCurrentFragment,mCurrentFragment.getClass().getSimpleName()).commit();
+        mPreMenuItem = mNavigationView.getMenu().getItem(0);
+        mPreMenuItem.setChecked(true);
     }
 
     private void setNavigationViewItemClickListener() {
@@ -91,7 +105,7 @@ public class HomeActivity extends BaseActivity {
                 switch (item.getItemId()) {
                     case R.id.navigation_item_home:
                         mToolbar.setTitle("首页");
-                       // switchFragment(MainFragment.class);
+                        switchFragment(MainFragment.class);
                         break;
                     case R.id.navigation_item_ganhuo:
                         mToolbar.setTitle("干货福利");
@@ -157,9 +171,9 @@ public class HomeActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            //startActivityWithoutExtras(SettingActivity.class);
+            startActivityWithoutExtras(SettingActivity.class);
         } else if (id == R.id.action_about) {
-            //startActivityWithoutExtras(AboutActivity.class);
+            startActivityWithoutExtras(AboutActivity.class);
         }
 
 

@@ -1,5 +1,6 @@
 package com.yiyeshu.xxyaya.base;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,8 @@ import butterknife.Unbinder;
  * Created by lhw on 2017/5/17.
  */
 public abstract class BaseFragment extends Fragment {
-
+    private View mContentView;
+    private Context mContext;
     private Unbinder unbinder;
 
     /**
@@ -25,24 +27,30 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 界面初始化
      */
-    protected abstract void init();
+    protected abstract void setUpView();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getContentViewLayoutID() != 0) {
-            return inflater.inflate(getContentViewLayoutID(), container, false);
+            mContentView= inflater.inflate(getContentViewLayoutID(), container, false);
         } else {
-            return super.onCreateView(inflater, container, savedInstanceState);
+            mContentView= super.onCreateView(inflater, container, savedInstanceState);
         }
+        mContext = getContext();
+        return mContentView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
-        init();
+        setUpView();
+        setUpData();
     }
+
+    protected abstract void setUpData();
+
 
     @Override
     public void onDestroyView() {

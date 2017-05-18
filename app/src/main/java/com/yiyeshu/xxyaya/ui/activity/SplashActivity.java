@@ -1,4 +1,4 @@
-package com.yiyeshu.xxyaya.module.splash;
+package com.yiyeshu.xxyaya.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

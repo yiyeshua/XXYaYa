@@ -1,5 +1,6 @@
 package com.yiyeshu.xxyaya.base;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
@@ -33,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BGASwipe
     /**
      * 初始化布局以及View控件
      */
-    protected abstract void initView(Bundle savedInstanceState);
+    protected abstract void setUpView(Bundle savedInstanceState);
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -50,9 +51,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BGASwipe
         beforeInit();
         if (getContentViewLayoutID() != 0) {
             setContentView(getContentViewLayoutID());
-            initView(savedInstanceState);
+            setUpView(savedInstanceState);
+            initData();
         }
     }
+
+    protected abstract void initData();
 
 
     /**
@@ -159,6 +163,18 @@ public abstract class BaseActivity extends AppCompatActivity implements BGASwipe
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    protected void startActivityWithoutExtras(Class<?> clazz) {
+        Intent intent = new Intent(this, clazz);
+        startActivity(intent);
+    }
+
+    protected void startActivityWithExtras(Class<?> clazz, Bundle extras) {
+        Intent intent = new Intent(this, clazz);
+        intent.putExtras(extras);
+        startActivity(intent);
     }
 
 }
