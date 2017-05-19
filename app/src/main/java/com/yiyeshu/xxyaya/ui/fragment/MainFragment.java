@@ -4,7 +4,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import com.yiyeshu.xxyaya.R;
-import com.yiyeshu.xxyaya.adapter.MainFraViewAdapter;
+import com.yiyeshu.xxyaya.adapter.MainPagerAdapter;
 import com.yiyeshu.xxyaya.base.BaseFragment;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.viewpager)
     ViewPager mViewpager;     //vierpager页面
 
-    private List<String> titles=new ArrayList<>();
+    private List<String> titles;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -32,13 +32,14 @@ public class MainFragment extends BaseFragment {
 
     @Override
     protected void setUpView() {
+        titles=new ArrayList<>();
         titles.add("书籍");
         titles.add("电影");
     }
 
     @Override
     protected void setUpData() {
-        MainFraViewAdapter mainFraViewAdapter=new MainFraViewAdapter(getChildFragmentManager(),getContext(),titles);
+        MainPagerAdapter mainFraViewAdapter=new MainPagerAdapter(getChildFragmentManager(),getContext(),titles);
        mViewpager.setAdapter(mainFraViewAdapter);
         mSlidingTabs.setTabMode(TabLayout.MODE_FIXED);
         mSlidingTabs.setupWithViewPager(mViewpager);

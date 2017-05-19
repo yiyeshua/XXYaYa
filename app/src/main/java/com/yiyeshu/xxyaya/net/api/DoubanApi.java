@@ -16,7 +16,7 @@ import retrofit2.http.Path;
  * Date: 2017-04-14  11:23
  */
 
-public interface GankApi {
+public interface DoubanApi {
 
     /**
      * 根据category获取Android、iOS等干货数据

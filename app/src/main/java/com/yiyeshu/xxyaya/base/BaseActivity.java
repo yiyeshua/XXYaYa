@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.yiyeshu.xxyaya.R;
-import com.yiyeshu.xxyaya.utils.StatusBarUtil;
+import com.yiyeshu.common.utils.StatusBarUtil;
 
 import butterknife.ButterKnife;
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
@@ -47,8 +47,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BGASwipe
         // 在 super.onCreate(savedInstanceState) 之前调用该方法
         initSwipeBac1kFinish();
 //        setStatusBarTransparent();
-        super.onCreate(savedInstanceState);
         beforeInit();
+        super.onCreate(savedInstanceState);
+
         if (getContentViewLayoutID() != 0) {
             setContentView(getContentViewLayoutID());
             setUpView(savedInstanceState);

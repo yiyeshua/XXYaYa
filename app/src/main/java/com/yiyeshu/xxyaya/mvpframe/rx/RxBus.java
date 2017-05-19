@@ -7,11 +7,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.subjects.PublishSubject;
-import rx.subjects.Subject;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 /**
  * Created by Administrator on 2016/12/31.
@@ -36,11 +36,11 @@ public class RxBus {
     /**
      * 订阅事件源
      *
-     * @param mObservable
-     * @param mAction1
+     * @param tObservable
+     * @param consumer
      * @return
      */
-    public RxBus OnEvent(Observable<?> mObservable, Action1<Object> mAction1) {
+/*    public RxBus OnEvent(Observable<?> mObservable, Action1<Object> mAction1) {
         mObservable.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mAction1, new Action1<Throwable>() {
                     @Override
@@ -49,7 +49,20 @@ public class RxBus {
                     }
                 });
         return $();
+    }*/
+
+    public RxBus OnEvent(io.reactivex.Observable<?> tObservable, Consumer<Object> consumer){
+        tObservable.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(consumer, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                });
+        return $();
     }
+
+
 
     /**
      * 注册事件源
@@ -64,7 +77,7 @@ public class RxBus {
             subjectList = new ArrayList<Subject>();
             subjectMapper.put(tag, subjectList);
         }
-        Subject<T, T> subject;
+        Subject<T> subject;
         subjectList.add(subject = PublishSubject.create());
         //LogUtil.d("register", tag + "  size:" + subjectList.size());
         return subject;
@@ -92,7 +105,7 @@ public class RxBus {
             return $();
         List<Subject> subjects = subjectMapper.get(tag);
         if (null != subjects) {
-            subjects.remove((Subject<?, ?>) observable);
+            subjects.remove((Subject<?>) observable);
             if (isEmpty(subjects)) {
                 subjectMapper.remove(tag);
                 //LogUtil.d("unregister", tag + "  size:" + subjects.size());

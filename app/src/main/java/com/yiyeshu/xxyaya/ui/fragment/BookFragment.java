@@ -3,6 +3,7 @@ package com.yiyeshu.xxyaya.ui.fragment;
 import android.app.AlertDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -11,13 +12,17 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.yiyeshu.xxyaya.R;
 import com.yiyeshu.xxyaya.adapter.BookAdapter;
 import com.yiyeshu.xxyaya.base.BaseFragment;
-import com.yiyeshu.xxyaya.bean.BookBean;
+import com.yiyeshu.xxyaya.bean.Book;
 import com.yiyeshu.xxyaya.constant.Apis;
+import com.yiyeshu.common.utils.GsonUtil;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import butterknife.BindView;
+import okhttp3.Call;
 
 /**
  * Created by lhw on 2017/5/18.
@@ -36,14 +41,12 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
     private int mPageSize = 20;                      //单页加载个数
     private int mCurrentPageIndex = 1;             //当前页
 
-    private BookAdapter mBookAdapter;
 
     private String mCurrentKeyWord;   //搜索关键字
     private EditText mETInput;
     private AlertDialog mInputDialog;
     private LinearLayoutManager linearLayoutManager;
-    private BookAdapter bookAdapter;
-    private Object dataFromNet;
+    private BookAdapter mBookAdapter;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -54,8 +57,8 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
     protected void setUpView() {
         linearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerview.setLayoutManager(linearLayoutManager);
-        bookAdapter = new BookAdapter(getContext(), new ArrayList<BookBean>());
-        mRecyclerview.setAdapter(bookAdapter);
+        mBookAdapter = new BookAdapter(getContext(), new ArrayList<Book.BookBean>());
+        mRecyclerview.setAdapter(mBookAdapter);
         //设置下拉刷新，上拉加载更多的监听
         mRecyclerview.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -93,7 +96,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
         switch (actionRefresh) {
             //下拉刷新，每次都将数据清空，重新加载第一页
             case ACTION_REFRESH:
-                bookAdapter.clear();
+                mBookAdapter.clear();
                 mCurrentPageIndex = 1;
                 break;
             //上拉加载更多时，页数加1
@@ -111,6 +114,38 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
     public void getDataFromNet() {
         String reqUrl = Apis.SearchBookApi + "?q=" + mCurrentKeyWord + "&start=" + (mCurrentPageIndex - 1) * mPageSize +
                 "&count=" + mPageSize;
+        Log.d(TAG, "getDataFromNet: " + reqUrl);
+        OkHttpUtils.get().url(reqUrl).build()
+                .connTimeOut(5000)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        Log.d(TAG, "onError: " + e.getMessage());
+                        loadComplete();
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "onResponse: " + response);
+                        mBookAdapter.addAll(GsonUtil.gsonToBean(response, Book.class).getBooks());
+                        loadComplete();
+                    }
+                });
+    }
+
+
+    /**
+     * 加载数据完成
+     */
+    private void loadComplete() {
+        switch (mCurrentAction) {
+            case ACTION_REFRESH :
+                mRecyclerview.refreshComplete();
+                break;
+            case ACTION_LOAD_MORE:
+                mRecyclerview.loadMoreComplete();
+                break;
+        }
     }
 
 
@@ -122,6 +157,5 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
                 break;
         }
     }
-
 
 }

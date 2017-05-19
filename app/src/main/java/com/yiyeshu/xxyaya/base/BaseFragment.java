@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import butterknife.Unbinder;
  * Created by lhw on 2017/5/17.
  */
 public abstract class BaseFragment extends Fragment {
+    private static final String TAG = "BaseFragment";
     private View mContentView;
     private Context mContext;
     private Unbinder unbinder;
+
 
     /**
      * 获取布局ID
@@ -45,9 +48,11 @@ public abstract class BaseFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
+        Log.e(TAG, "onViewCreated: " );
         setUpView();
         setUpData();
     }
+
 
     protected abstract void setUpData();
 

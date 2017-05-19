@@ -20,7 +20,7 @@ import com.weavey.loading.lib.LoadingLayout;
 import com.yiyeshu.xxyaya.R;
 import com.yiyeshu.xxyaya.base.BaseActivity;
 import com.yiyeshu.xxyaya.ui.fragment.MainFragment;
-import com.yiyeshu.xxyaya.utils.ViewUtil;
+import com.yiyeshu.common.utils.ViewUtil;
 
 import butterknife.BindView;
 
