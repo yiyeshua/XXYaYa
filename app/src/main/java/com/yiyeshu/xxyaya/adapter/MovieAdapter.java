@@ -7,7 +7,7 @@ import com.yiyeshu.common.adapter.SolidRVBaseAdapter;
 import com.yiyeshu.common.utils.StringUtil;
 import com.yiyeshu.xxyaya.R;
 import com.yiyeshu.xxyaya.bean.Movie;
-import com.yiyeshu.xxyaya.ui.activity.BookDetailActivity;
+import com.yiyeshu.xxyaya.ui.activity.MovieDetailActivity;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class MovieAdapter extends SolidRVBaseAdapter<Movie.MovieBean> {
     }
     @Override
     protected void onItemClick(int position) {
-        Intent intent = new Intent(mContext, BookDetailActivity.class);
+        Intent intent = new Intent(mContext, MovieDetailActivity.class);
         intent.putExtra("url", mBeans.get(position - 1).getAlt());
         mContext.startActivity(intent);
     }

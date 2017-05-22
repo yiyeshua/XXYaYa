@@ -22,7 +22,8 @@
         </activity>
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.AboutActivity" />
-        <activity android:name=".ui.activity.BookDetailActivity"></activity>
+        <activity android:name=".ui.activity.BookDetailActivity" />
+        <activity android:name=".ui.activity.MovieDetailActivity"></activity>
     </application>
 
 </manifest>
