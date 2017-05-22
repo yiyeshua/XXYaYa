@@ -1,6 +1,7 @@
 package com.yiyeshu.xxyaya.ui.fragment;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -9,12 +10,12 @@ import android.widget.EditText;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.yiyeshu.common.utils.GsonUtil;
 import com.yiyeshu.xxyaya.R;
 import com.yiyeshu.xxyaya.adapter.BookAdapter;
 import com.yiyeshu.xxyaya.base.BaseFragment;
 import com.yiyeshu.xxyaya.bean.Book;
 import com.yiyeshu.xxyaya.constant.Apis;
-import com.yiyeshu.common.utils.GsonUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -47,6 +48,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
     private AlertDialog mInputDialog;
     private LinearLayoutManager linearLayoutManager;
     private BookAdapter mBookAdapter;
+    private String reqUrl;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -112,7 +114,7 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
      * 加载数据
      */
     public void getDataFromNet() {
-        String reqUrl = Apis.SearchBookApi + "?q=" + mCurrentKeyWord + "&start=" + (mCurrentPageIndex - 1) * mPageSize +
+        reqUrl = Apis.SearchBookApi + "?q=" + mCurrentKeyWord + "&start=" + (mCurrentPageIndex - 1) * mPageSize +
                 "&count=" + mPageSize;
         Log.d(TAG, "getDataFromNet: " + reqUrl);
         OkHttpUtils.get().url(reqUrl).build()
@@ -153,7 +155,25 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_search :
-
+                mETInput=new EditText(getContext());
+                mInputDialog=new AlertDialog.Builder(getContext())
+                        .setView(mETInput)
+                        .setTitle("请输入搜索关键字")
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mCurrentKeyWord = mETInput.getText().toString();
+                                mRecyclerview.setRefreshing(true);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("cancle", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
                 break;
         }
     }

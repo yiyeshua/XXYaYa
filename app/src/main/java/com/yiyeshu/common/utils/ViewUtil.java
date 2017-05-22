@@ -6,8 +6,8 @@ import android.util.TypedValue;
 
 import com.yiyeshu.xxyaya.base.BaseFragment;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 
 /**
@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class ViewUtil {
 
-    private static Map<String, BaseFragment> fragmentList = new HashMap<>();
+    private static Map<String, BaseFragment> fragmentList = new WeakHashMap<>();
 
     /**
      * 根据Class创建Fragment

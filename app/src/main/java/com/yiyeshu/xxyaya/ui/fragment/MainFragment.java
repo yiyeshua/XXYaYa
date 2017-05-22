@@ -40,7 +40,7 @@ public class MainFragment extends BaseFragment {
     @Override
     protected void setUpData() {
         MainPagerAdapter mainFraViewAdapter=new MainPagerAdapter(getChildFragmentManager(),getContext(),titles);
-       mViewpager.setAdapter(mainFraViewAdapter);
+        mViewpager.setAdapter(mainFraViewAdapter);
         mSlidingTabs.setTabMode(TabLayout.MODE_FIXED);
         mSlidingTabs.setupWithViewPager(mViewpager);
     }

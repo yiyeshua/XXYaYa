@@ -37,7 +37,8 @@ public class Apis {
      * start 	start 	int 	Y 	Y 	Y 	0
      * count 	count 	int 	Y 	Y 	Y 	20
      * <br/>
-     * Example:GET /v2/movie/search?q=张艺谋 GET /v2/movie/search?tag=喜剧
+     * Example:GET http://api.douban.com/v2/movie/search?q=张艺谋
+     * GET http://api.douban.com/v2/movie/search?tag=喜剧
      */
     public static String MovieSearch = "http://api.douban.com/v2/movie/search";
 
