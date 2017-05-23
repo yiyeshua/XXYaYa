@@ -14,13 +14,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.weavey.loading.lib.LoadingLayout;
+import com.yiyeshu.common.utils.ViewUtil;
 import com.yiyeshu.xxyaya.R;
 import com.yiyeshu.xxyaya.base.BaseActivity;
 import com.yiyeshu.xxyaya.ui.fragment.MainFragment;
-import com.yiyeshu.common.utils.ViewUtil;
+import com.yiyeshu.xxyaya.views.CircleImageView;
+import com.yiyeshu.xxyaya.views.dialog.BottomMenuDialog;
 
 import butterknife.BindView;
 
@@ -78,6 +81,39 @@ public class HomeActivity extends BaseActivity {
         });
         mLoading.setStatus(LoadingLayout.Success);
 
+    }
+
+    @Override
+    protected void initListener() {
+        //获取菜单栏头像
+        View headerView = mNavigationView.getHeaderView(0);
+        CircleImageView profileImage = (CircleImageView) headerView.findViewById(R.id.profile_image);
+        TextView tvNickName = (TextView) headerView.findViewById(R.id.tv_nick_name);
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomMenuDialog dialog = new BottomMenuDialog.BottomMenuBuilder()
+                        .addItem("拍照", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        })
+                        .addItem("相册中选择", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        })
+                        .addItem("取消",null).build();
+                dialog.show(getSupportFragmentManager());
+            }
+        });
+        tvNickName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
@@ -169,13 +205,11 @@ public class HomeActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivityWithoutExtras(SettingActivity.class);
         } else if (id == R.id.action_about) {
             startActivityWithoutExtras(AboutActivity.class);
         }
-
 
         return super.onOptionsItemSelected(item);
     }

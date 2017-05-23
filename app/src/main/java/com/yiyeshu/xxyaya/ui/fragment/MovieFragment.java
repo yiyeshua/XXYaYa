@@ -127,7 +127,7 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
 
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        Log.e(TAG, "onResponse: " + response);
                         List<Movie.MovieBean> subjects = GsonUtil.gsonToBean(response, Movie.class).getSubjects();
                         Log.e("TAG", subjects.size()+"");
                         mMovieAdapter.addAll(subjects);
@@ -149,6 +149,7 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
                 mRecyclerview.loadMoreComplete();
                 break;
         }
+
     }
 
 

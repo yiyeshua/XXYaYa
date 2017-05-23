@@ -53,9 +53,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BGASwipe
         if (getContentViewLayoutID() != 0) {
             setContentView(getContentViewLayoutID());
             setUpView(savedInstanceState);
+            initListener();
             initData();
         }
     }
+
+    protected abstract void initListener();
 
     protected abstract void initData();
 
