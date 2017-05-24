@@ -1,1 +1,1 @@
-include ':app', ':library:coordinatortablayout'
+include ':app', ':library:coordinatortablayout', ':library:imagepicker'

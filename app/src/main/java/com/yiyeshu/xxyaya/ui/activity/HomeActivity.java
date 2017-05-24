@@ -1,10 +1,13 @@
 package com.yiyeshu.xxyaya.ui.activity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -17,13 +20,17 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.weavey.loading.lib.LoadingLayout;
+import com.yiyeshu.common.utils.SpUtils;
 import com.yiyeshu.common.utils.ViewUtil;
+import com.yiyeshu.imagepicker.PhotoCallback;
+import com.yiyeshu.imagepicker.PhotoPickerUtil;
 import com.yiyeshu.xxyaya.R;
 import com.yiyeshu.xxyaya.base.BaseActivity;
 import com.yiyeshu.xxyaya.ui.fragment.MainFragment;
 import com.yiyeshu.xxyaya.views.CircleImageView;
-import com.yiyeshu.xxyaya.views.dialog.BottomMenuDialog;
 
 import butterknife.BindView;
 
@@ -47,6 +54,8 @@ public class HomeActivity extends BaseActivity {
     DrawerLayout mDrawerLayout;
     @BindView(R.id.loading)
     LoadingLayout mLoading;
+    private CircleImageView profileImage;
+    private TextView tvNickName;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -81,31 +90,43 @@ public class HomeActivity extends BaseActivity {
         });
         mLoading.setStatus(LoadingLayout.Success);
 
+        View headerView = mNavigationView.getHeaderView(0);
+        profileImage = (CircleImageView) headerView.findViewById(R.id.profile_image);
+        tvNickName = (TextView) headerView.findViewById(R.id.tv_nick_name);
+        String headimg = (String) SpUtils.get(HomeActivity.this, "imagePath", null);
+        Toast.makeText(HomeActivity.this, headimg, Toast.LENGTH_SHORT).show();
+
+        if(headimg!=null){
+            Glide.with(this).load(headimg).asBitmap().centerCrop().into(new BitmapImageViewTarget(profileImage) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    profileImage.setImageDrawable(circularBitmapDrawable);
+                }
+            });
+        }
     }
 
     @Override
     protected void initListener() {
         //获取菜单栏头像
-        View headerView = mNavigationView.getHeaderView(0);
-        CircleImageView profileImage = (CircleImageView) headerView.findViewById(R.id.profile_image);
-        TextView tvNickName = (TextView) headerView.findViewById(R.id.tv_nick_name);
+
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BottomMenuDialog dialog = new BottomMenuDialog.BottomMenuBuilder()
-                        .addItem("拍照", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        })
-                        .addItem("相册中选择", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                            }
-                        })
-                        .addItem("取消",null).build();
-                dialog.show(getSupportFragmentManager());
+                PhotoPickerUtil.getInstance().start(HomeActivity.this, new PhotoCallback() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap, String imagePath) {
+                        profileImage.setImageBitmap(bitmap);
+                        Log.e(TAG, "eeeeeeeeeeeeeeeeeeeeeeeeeeeee: " +imagePath );
+                        SpUtils.put(HomeActivity.this,"imagePath",imagePath);
+                        Toast.makeText(HomeActivity.this, "头像更改成功"+imagePath, Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "ffffffffffffffffffffffff"+SpUtils.get(HomeActivity.this,"imagePath","111"));
+                        ;
+                    }
+                });
             }
         });
         tvNickName.setOnClickListener(new View.OnClickListener() {
