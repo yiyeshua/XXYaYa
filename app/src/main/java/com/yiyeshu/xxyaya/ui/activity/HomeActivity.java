@@ -1,13 +1,12 @@
 package com.yiyeshu.xxyaya.ui.activity;
 
+import android.Manifest;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -20,11 +19,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.weavey.loading.lib.LoadingLayout;
-import com.yiyeshu.common.utils.SpUtils;
+import com.yiyeshu.common.utils.AppUtils;
+import com.yiyeshu.common.utils.CacheUtils;
 import com.yiyeshu.common.utils.ViewUtil;
+import com.yiyeshu.common.utils.cache.ACache;
 import com.yiyeshu.imagepicker.PhotoCallback;
 import com.yiyeshu.imagepicker.PhotoPickerUtil;
 import com.yiyeshu.xxyaya.R;
@@ -41,6 +40,10 @@ public class HomeActivity extends BaseActivity {
     private FragmentManager mFragmentManager;    //fragment管理器
     private Fragment mCurrentFragment;
     private MenuItem mPreMenuItem;
+
+    static final String[] PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA};
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -93,20 +96,14 @@ public class HomeActivity extends BaseActivity {
         View headerView = mNavigationView.getHeaderView(0);
         profileImage = (CircleImageView) headerView.findViewById(R.id.profile_image);
         tvNickName = (TextView) headerView.findViewById(R.id.tv_nick_name);
-        String headimg = (String) SpUtils.get(HomeActivity.this, "imagePath", null);
+        String headimg = CacheUtils.getString(HomeActivity.this,"imagePath");
         Toast.makeText(HomeActivity.this, headimg, Toast.LENGTH_SHORT).show();
-
-        if(headimg!=null){
-            Glide.with(this).load(headimg).asBitmap().centerCrop().into(new BitmapImageViewTarget(profileImage) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    profileImage.setImageDrawable(circularBitmapDrawable);
-                }
-            });
+        Log.e(TAG, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+headimg);
+       Bitmap headimgs = ACache.get(HomeActivity.this).getAsBitmap("headimg");
+        if(headimgs!=null){
+            profileImage.setImageBitmap(headimgs);
         }
+
     }
 
     @Override
@@ -116,14 +113,15 @@ public class HomeActivity extends BaseActivity {
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PhotoPickerUtil.getInstance().start(HomeActivity.this, new PhotoCallback() {
+                PhotoPickerUtil.getInstance().start(AppUtils.getAppContext(), new PhotoCallback() {
                     @Override
                     public void onSuccess(Bitmap bitmap, String imagePath) {
                         profileImage.setImageBitmap(bitmap);
+                        ACache.get(HomeActivity.this).put("headimg",bitmap);
                         Log.e(TAG, "eeeeeeeeeeeeeeeeeeeeeeeeeeeee: " +imagePath );
-                        SpUtils.put(HomeActivity.this,"imagePath",imagePath);
+                        CacheUtils.putString(HomeActivity.this,"imagePath",imagePath);
                         Toast.makeText(HomeActivity.this, "头像更改成功"+imagePath, Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "ffffffffffffffffffffffff"+SpUtils.get(HomeActivity.this,"imagePath","111"));
+                        Log.e(TAG, "ffffffffffffffffffffffff"+ CacheUtils.getString(HomeActivity.this,"imagePath"));
                         ;
                     }
                 });

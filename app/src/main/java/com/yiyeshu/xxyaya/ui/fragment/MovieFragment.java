@@ -141,6 +141,9 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
      * 加载数据完成
      */
     private void loadComplete() {
+        if(mRecyclerview==null){
+            return;
+        }
         switch (mCurrentAction) {
             case ACTION_REFRESH :
                 mRecyclerview.refreshComplete();
