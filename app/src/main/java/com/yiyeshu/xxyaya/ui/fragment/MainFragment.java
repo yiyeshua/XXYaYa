@@ -2,6 +2,7 @@ package com.yiyeshu.xxyaya.ui.fragment;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.yiyeshu.xxyaya.R;
 import com.yiyeshu.xxyaya.adapter.MainPagerAdapter;
@@ -32,6 +33,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     protected void setUpView() {
+
         titles=new ArrayList<>();
         titles.add("书籍");
         titles.add("电影");
@@ -40,11 +42,15 @@ public class MainFragment extends BaseFragment {
     @Override
     protected void setUpData() {
         MainPagerAdapter mainFraViewAdapter=new MainPagerAdapter(getChildFragmentManager(),getContext(),titles);
-        mViewpager.setOffscreenPageLimit(0);
+//        mViewpager.setOffscreenPageLimit(0);
         mViewpager.setAdapter(mainFraViewAdapter);
         mSlidingTabs.setTabMode(TabLayout.MODE_FIXED);
         mSlidingTabs.setupWithViewPager(mViewpager);
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "onDestroy: " + "0000000000000000000");
+    }
 }

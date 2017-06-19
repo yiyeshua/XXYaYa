@@ -106,7 +106,6 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
                 break;
         }
         getDataFromNet();
-
     }
 
     /**
@@ -116,7 +115,7 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
         reqUrl = Apis.MovieSearch + "?tag=" + mCurrentKeyWord + "&start=" + (mCurrentPageIndex - 1) * mPageSize +
                 "&count=" + mPageSize;
         Log.d(TAG, "getDataFromNet: " + reqUrl);
-        OkHttpUtils.get().url(reqUrl).build()
+        OkHttpUtils.get().url(reqUrl).tag(this).build()
                 .connTimeOut(5000)
                 .execute(new StringCallback() {
                     @Override
@@ -136,14 +135,13 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
                 });
     }
 
-
     /**
      * 加载数据完成
      */
     private void loadComplete() {
-        if(mRecyclerview==null){
+      /*  if(mRecyclerview==null){
             return;
-        }
+        }*/
         switch (mCurrentAction) {
             case ACTION_REFRESH :
                 mRecyclerview.refreshComplete();
@@ -155,6 +153,12 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "onDestroy: " + "11111111111");
+        OkHttpUtils.getInstance().cancelTag(this);
+    }
 
     @Override
     public void onClick(View view) {

@@ -41,6 +41,7 @@ public abstract class BaseFragment extends Fragment {
             mContentView= super.onCreateView(inflater, container, savedInstanceState);
         }
         mContext = getContext();
+
         return mContentView;
     }
 

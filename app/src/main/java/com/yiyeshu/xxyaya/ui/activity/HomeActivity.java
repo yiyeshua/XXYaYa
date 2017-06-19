@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.weavey.loading.lib.LoadingLayout;
 import com.yiyeshu.common.utils.AppUtils;
 import com.yiyeshu.common.utils.CacheUtils;
+import com.yiyeshu.common.utils.SnackBarUtils;
 import com.yiyeshu.common.utils.ViewUtil;
 import com.yiyeshu.common.utils.cache.ACache;
 import com.yiyeshu.imagepicker.PhotoCallback;
@@ -73,6 +74,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void setUpView(Bundle savedInstanceState) {
+
         mToolbar.setTitle("首页");
 
         //这句一定要在下面几句之前调用，不然就会出现点击无反应
@@ -96,10 +98,7 @@ public class HomeActivity extends BaseActivity {
         View headerView = mNavigationView.getHeaderView(0);
         profileImage = (CircleImageView) headerView.findViewById(R.id.profile_image);
         tvNickName = (TextView) headerView.findViewById(R.id.tv_nick_name);
-        String headimg = CacheUtils.getString(HomeActivity.this,"imagePath");
-        Toast.makeText(HomeActivity.this, headimg, Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+headimg);
-       Bitmap headimgs = ACache.get(HomeActivity.this).getAsBitmap("headimg");
+        Bitmap headimgs = ACache.get(HomeActivity.this).getAsBitmap("headimg");
         if(headimgs!=null){
             profileImage.setImageBitmap(headimgs);
         }
@@ -118,10 +117,7 @@ public class HomeActivity extends BaseActivity {
                     public void onSuccess(Bitmap bitmap, String imagePath) {
                         profileImage.setImageBitmap(bitmap);
                         ACache.get(HomeActivity.this).put("headimg",bitmap);
-                        Log.e(TAG, "eeeeeeeeeeeeeeeeeeeeeeeeeeeee: " +imagePath );
                         CacheUtils.putString(HomeActivity.this,"imagePath",imagePath);
-                        Toast.makeText(HomeActivity.this, "头像更改成功"+imagePath, Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "ffffffffffffffffffffffff"+ CacheUtils.getString(HomeActivity.this,"imagePath"));
                         ;
                     }
                 });
@@ -233,5 +229,33 @@ public class HomeActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private long lastBackKeyDownTick = 0;
+    public static final long MAX_DOUBLE_BACK_DURATION = 1500;
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {//当前抽屉是打开的，则关闭
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+            return;
+        }
+
+     /*   if (mCurrentFragment instanceof WebViewFragment) {//如果当前的Fragment是WebViewFragment 则监听返回事件
+            WebViewFragment webViewFragment = (WebViewFragment) mCurrentFragment;
+            if (webViewFragment.canGoBack()) {
+                webViewFragment.goBack();
+                return;
+            }
+        }*/
+
+        long currentTick = System.currentTimeMillis();
+        if (currentTick - lastBackKeyDownTick > MAX_DOUBLE_BACK_DURATION) {
+            SnackBarUtils.makeShort(mDrawerLayout, "再按一次退出").success();
+
+            lastBackKeyDownTick = currentTick;
+        } else {
+            finish();
+            System.exit(0);
+        }
+    }
 
 }
