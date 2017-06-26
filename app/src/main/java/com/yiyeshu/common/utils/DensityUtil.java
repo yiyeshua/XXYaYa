@@ -12,6 +12,7 @@ public class DensityUtil {
     public static int dp2px(float value) {
         final float scale = sDensityDpi;
         return (int) (value * (scale / 160) + 0.5f);
+
     }
 
     public static int px2dp(float value) {
