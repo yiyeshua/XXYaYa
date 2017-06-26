@@ -3,8 +3,6 @@ package com.yiyeshu.common.utils;
 import android.content.res.Resources;
 import android.support.annotation.DimenRes;
 
-import com.xiecc.seeWeather.base.BaseApplication;
-
 public class DensityUtil {
 
     private static Resources sRes = Resources.getSystem();
@@ -32,6 +30,6 @@ public class DensityUtil {
     }
 
     public static int dimenPixelSize(@DimenRes int id) {
-        return BaseApplication.getAppContext().getResources().getDimensionPixelSize(id);
+        return AppUtils.getAppContext().getResources().getDimensionPixelSize(id);
     }
 }

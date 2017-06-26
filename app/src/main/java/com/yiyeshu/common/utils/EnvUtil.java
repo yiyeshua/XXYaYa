@@ -3,8 +3,6 @@ package com.yiyeshu.common.utils;
 import android.content.Context;
 import android.util.TypedValue;
 
-import com.xiecc.seeWeather.base.BaseApplication;
-
 public class EnvUtil {
 
     private static int sStatusBarHeight;
@@ -20,9 +18,9 @@ public class EnvUtil {
     public static int getStatusBarHeight() {
         if (sStatusBarHeight == 0) {
             int resourceId =
-                BaseApplication.getAppContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+                AppUtils.getAppContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
-                sStatusBarHeight = BaseApplication.getAppContext().getResources().getDimensionPixelSize(resourceId);
+                sStatusBarHeight = AppUtils.getAppContext().getResources().getDimensionPixelSize(resourceId);
             }
         }
         return sStatusBarHeight;
