@@ -27,6 +27,7 @@ public class DensityUtil {
     public static int px2sp(float value) {
         final float scale = sScaledDensity;
         return (int) (value / scale + 0.5f);
+
     }
 
     public static int dimenPixelSize(@DimenRes int id) {
