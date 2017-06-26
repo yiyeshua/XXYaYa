@@ -6,10 +6,15 @@
     android:orientation="vertical"
     android:id="@+id/linear"
     tools:context="com.yiyeshu.xxyaya.ui.activity.MovieDetailActivity">
-<com.yiyeshu.xxyaya.views.TitleBar
-    android:id="@+id/title"
-    android:layout_width="match_parent"
-    android:layout_height="50dp">
+    <com.yiyeshu.xxyaya.views.TitleBar
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
 
-</com.yiyeshu.xxyaya.views.TitleBar>
+    </com.yiyeshu.xxyaya.views.TitleBar>
+    <FrameLayout
+        android:id="@+id/web_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 </LinearLayout>

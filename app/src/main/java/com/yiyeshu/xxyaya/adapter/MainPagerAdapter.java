@@ -31,13 +31,16 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        BaseFragment fragment=ViewUtil.createFragment(BookFragment.class,false);
+        BaseFragment fragment=null;
         switch (mTitles.get(position)) {
             case "书籍" :
                 fragment = ViewUtil.createFragment(BookFragment.class, false);
                 break;
             case "电影":
                 fragment =  ViewUtil.createFragment(MovieFragment.class,false);
+                break;
+            default:
+                fragment = ViewUtil.createFragment(BookFragment.class, false);
                 break;
         }
         return fragment;

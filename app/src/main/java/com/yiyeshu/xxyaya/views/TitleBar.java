@@ -50,8 +50,9 @@ public class TitleBar extends LinearLayout {
     /**
      * 左边按钮点击
      */
-    public void setLeftListener(OnClickListener l) {
+    public TitleBar setLeftListener(OnClickListener l) {
         mLeftBtn.setOnClickListener(l);
+        return this;
     }
 
     /**
@@ -71,8 +72,9 @@ public class TitleBar extends LinearLayout {
     /**
      * 右边按钮点击
      */
-    public void setRightListener(OnClickListener l) {
+    public TitleBar setRightListener(OnClickListener l) {
         mRightBtn.setOnClickListener(l);
+        return this;
     }
 
     /**

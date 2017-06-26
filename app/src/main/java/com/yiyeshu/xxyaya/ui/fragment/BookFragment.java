@@ -140,6 +140,9 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
      * 加载数据完成
      */
     private void loadComplete() {
+       /* if(mRecyclerview == null){
+            return;
+        }*/
         switch (mCurrentAction) {
             case ACTION_REFRESH :
                 mRecyclerview.refreshComplete();
@@ -150,6 +153,11 @@ public class BookFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "onDestroy: " + "22222222222222");
+    }
 
     @Override
     public void onClick(View view) {

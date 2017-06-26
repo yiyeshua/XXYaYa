@@ -1,7 +1,7 @@
 package com.yiyeshu.common.http;
 
 
-import com.yiyeshu.common.http.provider.PicassoImageLoaderProvider;
+import com.yiyeshu.common.http.provider.GlideImageLoaderProvider;
 import com.yiyeshu.common.http.provider.base.IImageLoaderProvider;
 
 /**
@@ -17,7 +17,7 @@ public class ImageLoader {
         if (mProvider == null) {
             synchronized (ImageLoader.class) {
                 if (mProvider == null) {
-                    mProvider = new PicassoImageLoaderProvider();
+                    mProvider = new GlideImageLoaderProvider();
                 }
             }
         }

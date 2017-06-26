@@ -13,7 +13,7 @@ import com.yiyeshu.xxyaya.App;
  * Date:2016/5/13
  * Time:10:27
  */
-public class PicassoImageLoaderProvider implements IImageLoaderProvider {
+public class GlideImageLoaderProvider implements IImageLoaderProvider {
     @Override
     public void loadImage(ImageRequest request) {
         Glide.with(App.getInstance()).load(request.getUrl()).placeholder(request.getPlaceHolder()).into(request.getImageView());

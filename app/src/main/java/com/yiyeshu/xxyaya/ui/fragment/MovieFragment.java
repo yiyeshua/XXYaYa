@@ -106,7 +106,6 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
                 break;
         }
         getDataFromNet();
-
     }
 
     /**
@@ -116,7 +115,7 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
         reqUrl = Apis.MovieSearch + "?tag=" + mCurrentKeyWord + "&start=" + (mCurrentPageIndex - 1) * mPageSize +
                 "&count=" + mPageSize;
         Log.d(TAG, "getDataFromNet: " + reqUrl);
-        OkHttpUtils.get().url(reqUrl).build()
+        OkHttpUtils.get().url(reqUrl).tag(this).build()
                 .connTimeOut(5000)
                 .execute(new StringCallback() {
                     @Override
@@ -127,7 +126,7 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
 
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        Log.e(TAG, "onResponse: " + response);
                         List<Movie.MovieBean> subjects = GsonUtil.gsonToBean(response, Movie.class).getSubjects();
                         Log.e("TAG", subjects.size()+"");
                         mMovieAdapter.addAll(subjects);
@@ -136,11 +135,13 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
                 });
     }
 
-
     /**
      * 加载数据完成
      */
     private void loadComplete() {
+      /*  if(mRecyclerview==null){
+            return;
+        }*/
         switch (mCurrentAction) {
             case ACTION_REFRESH :
                 mRecyclerview.refreshComplete();
@@ -149,8 +150,15 @@ public class MovieFragment extends BaseFragment implements View.OnClickListener 
                 mRecyclerview.loadMoreComplete();
                 break;
         }
+
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "onDestroy: " + "11111111111");
+        OkHttpUtils.getInstance().cancelTag(this);
+    }
 
     @Override
     public void onClick(View view) {

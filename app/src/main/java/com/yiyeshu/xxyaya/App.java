@@ -19,6 +19,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        INSTANCE = this;
         // 初始化 LeakCanary，内存泄漏检测
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
@@ -28,7 +29,7 @@ public class App extends Application {
         LeakCanary.install(this);
         //滑动返回
         BGASwipeBackManager.getInstance().init(this);
-        INSTANCE = this;
+      //页面状态管理
         LoadingLayout.getConfig()
                 .setErrorText("出错啦~请稍后重试！")
                 .setEmptyText("抱歉，暂无数据")
