@@ -37,7 +37,6 @@ public class StatusBarUtil {
      */
     public static void setColor(Activity activity, @ColorInt int color) {
         setColor(activity, color, DEFAULT_STATUS_BAR_ALPHA);
-
     }
 
     /**
