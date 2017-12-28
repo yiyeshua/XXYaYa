@@ -1,8 +1,8 @@
-package com.yiyeshu.xxyaya.net;
+package com.yiyeshu.xxyaya.api;
 
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.yiyeshu.xxyaya.net.api.GankApi;
+import com.yiyeshu.xxyaya.api.api.GankApi;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

@@ -1,10 +1,10 @@
-package com.yiyeshu.xxyaya.net;
+package com.yiyeshu.xxyaya.api;
 
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.yiyeshu.common.http.interceptor.RequestInterceptor;
 import com.yiyeshu.common.http.interceptor.ResponseInterceptor;
-import com.yiyeshu.xxyaya.net.api.DoubanApi;
+import com.yiyeshu.xxyaya.api.api.DoubanApi;
 
 import java.util.concurrent.TimeUnit;
 
